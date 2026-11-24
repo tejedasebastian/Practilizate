@@ -10,4 +10,8 @@ The project uses publicly accessible internship listings for educational and res
 
 If you are a representative of practicas.pe and have a data or attribution concern, please open an issue in the repository so the project can review and remove any content if necessary.
 
-Code license: MIT. Data and derived datasets are not covered by the MIT license. See `DATA_SOURCES.md`.
+## Licensing
+
+Code is licensed under the MIT license in `LICENSE`.
+
+Data and derived datasets are **not** covered by the MIT license. See `DATA_SOURCES.md` for source attribution and reuse constraints. The synthetic fixtures in `data/fixtures/` are generated for testing only and do not contain real listings.
