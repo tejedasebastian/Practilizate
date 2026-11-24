@@ -90,7 +90,7 @@ Data comes from public listings on [practicas.pe](https://www.practicas.pe/).
 
 - Practilizate is **not affiliated** with practicas.pe.
 - The project uses public data for educational and research purposes.
-- Only aggregated data is published. Raw scraped HTML and personal data are not included.
+- Only aggregated live data is published; the release sample is synthetic. Raw scraped HTML and personal data are not included.
 - The live CSV, Excel, and HTML outputs stay outside Git (`data/processed/`);
   the public screenshots and the release sample show aggregate or synthetic
   data only.

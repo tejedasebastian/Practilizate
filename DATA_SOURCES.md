@@ -43,7 +43,7 @@ Public repository:
 - Data: not covered by the MIT license.
 - No raw scraped HTML.
 - Only synthetic or curated fixtures.
-- Only aggregated outputs with attribution.
+- Only aggregated live outputs or clearly labeled synthetic samples, with attribution.
 
 ## Legal note
 

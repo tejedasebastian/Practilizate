@@ -90,7 +90,7 @@ Los datos provienen de avisos públicos de [practicas.pe](https://www.practicas.
 
 - Practilizate **no está afiliado** a practicas.pe.
 - Se usan datos públicos con fines educativos y de investigación.
-- Solo se publican datos agregados. No se incluyen HTML crudo ni datos personales.
+- Solo se publican datos agregados de la fuente live; la muestra del release es sintética. No se incluyen HTML crudo ni datos personales.
 - El CSV, el Excel y el HTML live quedan fuera de Git (`data/processed/`); las
   capturas públicas y la muestra del release solo contienen datos agregados o
   sintéticos.
