@@ -4,7 +4,7 @@
 
 Practilizate convierte avisos públicos de prácticas en un producto de datos reproducible: un modelo estrella validado en PostgreSQL, un dashboard en Power BI, un libro Excel, un reporte HTML portátil y un informe de calidad de datos.
 
-> **Estado:** v0.1.3 con snapshot live (`live-20261029`). El modelo estrella en PostgreSQL, el libro Excel, el reporte bilingüe en Power BI, el reporte HTML offline y los artefactos E2E están en el repositorio.
+> **Estado:** v0.1.3. El repositorio incluye el pipeline, el esquema PostgreSQL, los fixtures sintéticos, el proyecto bilingüe de Power BI (PBIP) y capturas agregadas. Los entregables Excel, HTML y CSV se generan en cada ejecución y **no** se versionan. Una muestra sintética generada desde los fixtures está adjunta al [release v0.1.3](https://github.com/tejedasebastian/Practilizate/releases/tag/v0.1.3).
 > **English:** [README.md](README.md)
 
 ## Por qué Practilizate
@@ -74,6 +74,16 @@ practicas.pe
 - Informe de calidad: `docs/assets/quality-report.png`
 - Reporte HTML portátil (vista agregada): `docs/assets/html-report.png`
 
+¿Quieres los archivos reales? Descarga la muestra sintética del
+[release v0.1.3](https://github.com/tejedasebastian/Practilizate/releases/tag/v0.1.3):
+
+- `practilizate-synthetic.html` — reporte autocontenido.
+- `practilizate-synthetic.xlsx` — libro Excel.
+- `dashboard_dataset-synthetic.csv` — dataset del dashboard.
+
+La muestra se genera desde `data/fixtures/` con `--as-of 2026-10-29` y no
+contiene datos live.
+
 ## Fuente y atribución
 
 Los datos provienen de avisos públicos de [practicas.pe](https://www.practicas.pe/).
@@ -81,16 +91,17 @@ Los datos provienen de avisos públicos de [practicas.pe](https://www.practicas.
 - Practilizate **no está afiliado** a practicas.pe.
 - Se usan datos públicos con fines educativos y de investigación.
 - Solo se publican datos agregados. No se incluyen HTML crudo ni datos personales.
-- El CSV y el libro Excel live quedan fuera de Git (`data/processed/`); las
-  capturas públicas solo muestran conteos agregados.
+- El CSV, el Excel y el HTML live quedan fuera de Git (`data/processed/`); las
+  capturas públicas y la muestra del release solo contienen datos agregados o
+  sintéticos.
 - El recolector respeta `robots.txt`, límites de tasa y caché.
 - Ver [DATA_SOURCES.md](DATA_SOURCES.md) y [NOTICE.md](NOTICE.md).
 
 ## Inicio rápido
 
 ```powershell
-git clone <repository-url>
-cd practilizate
+git clone https://github.com/tejedasebastian/Practilizate.git
+cd Practilizate
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 pip install -e ".[dev]"
@@ -115,10 +126,13 @@ filtro de carreras del sitio (65 carreras en la fecha del snapshot).
 
 **1. Revisar el resultado sin instalar nada**
 
-Abre el release de GitHub, las capturas y `powerbi/practilizate.pbip` en Power
-BI Desktop. El PBIP contiene la definición del reporte; guárdalo como `.pbix`
-si necesitas un archivo único. También puedes abrir el `practilizate.html`
-generado en cualquier navegador: es un solo archivo sin dependencias externas.
+Descarga la muestra sintética del
+[release v0.1.3](https://github.com/tejedasebastian/Practilizate/releases/tag/v0.1.3)
+y abre `practilizate-synthetic.html` en cualquier navegador: es un solo archivo
+sin dependencias externas. Las capturas de `docs/assets/` muestran la vista
+agregada. Para revisar la definición del reporte, abre
+`powerbi/practilizate.pbip` en Power BI Desktop y guárdalo como `.pbix` si
+necesitas un archivo único.
 
 **2. Ejecutar el pipeline localmente**
 
@@ -127,11 +141,17 @@ verificar la instalación. Usa `--source live` para avisos reales.
 
 **3. Usar los entregables**
 
-- `data/processed/practilizate.html` — reporte portátil con búsqueda, filtros y toggle ES/EN.
-- `data/processed/practilizate.xlsx` — libro en español para estudiantes y centros de empleabilidad.
-- `data/processed/dashboard_dataset.csv` — snapshot para Power BI/analistas.
+Una ejecución local escribe estos archivos en `data/processed/` (ignorado por
+Git):
+
+- `practilizate.html` — reporte portátil con búsqueda, filtros y toggle ES/EN.
+- `practilizate.xlsx` — libro en español para estudiantes y centros de empleabilidad.
+- `dashboard_dataset.csv` — snapshot para Power BI/analistas.
+
+El repositorio en sí contiene:
+
 - `powerbi/practilizate.pbip` — fuente del reporte bilingüe.
-- Vista PostgreSQL `v_dashboard_ofertas` — análisis opcional en vivo.
+- Vista PostgreSQL `v_dashboard_ofertas` — análisis opcional en vivo (creada por `load`).
 
 **4. Compartirlo en línea**
 
@@ -153,7 +173,7 @@ usa fixtures y nunca llama al sitio público.
 Abre `powerbi/practilizate.pbip` en Power BI Desktop y guárdalo como `.pbix` si lo necesitas.
 
 - v0.1 usa `data/processed/dashboard_dataset.csv` y los CSV de soporte para que sea portable.
-- El modelo lee el snapshot mediante el parámetro `DataFolder`; actualízalo si mueves el repositorio.
+- El modelo lee el snapshot mediante el parámetro `DataFolder`. Su valor por defecto es la ruta relativa al repositorio `data\processed`; en Power BI Desktop configúralo con la ruta absoluta de tu clon antes de actualizar (el conector de archivos no resuelve rutas relativas de forma fiable).
 - Las seis páginas cubren resumen ejecutivo, habilidades, empresas y subvenciones, vencimientos, calidad y una guía bilingüe.
 - El reporte incluye toggle ES/EN (tabla `Idioma` y medidas `SWITCH`), texto alternativo, colores accesibles, pie de fuente y botón `Limpiar filtros`.
 - PostgreSQL queda como fuente opcional en vivo para analistas que prefieran SQL.
@@ -208,8 +228,9 @@ artifacts/e2e/
 └─ checksums.sha256
 ```
 
-`artifacts/e2e/` se genera y está en `.gitignore`; CI lo sube como artefacto y
-el release adjunta el paquete.
+`artifacts/e2e/` se genera y está en `.gitignore`; CI lo sube como artefacto de
+workflow. El release v0.1.3 adjunta una muestra sintética más pequeña (HTML,
+XLSX, CSV) generada desde los fixtures, no el snapshot live.
 
 ## Resultados
 
@@ -237,19 +258,19 @@ HTML muestra los mismos indicadores agregados sin texto de requisitos.
 ## Estructura del proyecto
 
 ```text
-practilizate/
+Practilizate/
 ├─ README.md
 ├─ README.es.md
 ├─ DATA_SOURCES.md
 ├─ NOTICE.md
 ├─ LICENSE
-├─ docs/assets/
+├─ docs/assets/            # capturas versionadas
 ├─ src/practilizate/
 ├─ sql/
 ├─ tests/e2e/
-├─ data/fixtures/
-├─ data/processed/
-├─ artifacts/e2e/
+├─ data/fixtures/          # fixtures sintéticos versionados
+├─ data/processed/         # generado por runs (ignorado por Git)
+├─ artifacts/e2e/          # generado por tests (ignorado por Git)
 ├─ powerbi/
 ├─ scripts/
 ├─ docker-compose.yml
@@ -276,6 +297,6 @@ practilizate/
 
 ## Licencia
 
-Código: MIT. Ver [LICENSE](LICENSE).
+Código: MIT. Ver [LICENSE](LICENSE) y [NOTICE.md](NOTICE.md).
 
 Los datos y datasets derivados no están cubiertos por la licencia MIT. Ver [DATA_SOURCES.md](DATA_SOURCES.md).
