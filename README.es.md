@@ -189,6 +189,7 @@ El libro se genera en `data/processed/practilizate.xlsx` e incluye:
 - `Empresas`
 - `Calidad`
 - `Diccionario`
+- `Listas`
 
 ## Reporte HTML portátil
 

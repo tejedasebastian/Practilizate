@@ -187,6 +187,7 @@ The workbook is generated at `data/processed/practilizate.xlsx` and includes:
 - `Empresas`
 - `Calidad`
 - `Diccionario`
+- `Listas`
 
 ## Portable HTML report
 
